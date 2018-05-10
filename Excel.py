@@ -18,6 +18,142 @@ def is_number(s):
     except ValueError:
         return False
 
+class Exlcol():
+    def __init__(self, num):
+        self.index = num
+        self.index_txt = []
+        self.indexlist_up = []
+        self.length = 0
+        self.coeffcnt = 0
+        
+        
+        
+    def int_to_text2(self):
+        self.length_check(self.index) #update length info
+        self.index_txt = []
+        if(self.index == 0):
+            print "ERROR index is 0"
+            return -1;
+        
+        coeff_3 = ( self.index/(26**2) ) 
+        print(coeff_3)
+        coeff_2 = ( self.index - (coeff_3*(26**2)) ) / (26**1)
+        print(coeff_2)
+        coeff_1 = ( self.index - (coeff_3*(26**2)) - (coeff_2*(26**1)) ) / (26**0) 
+        print(coeff_1)
+ 
+        if(coeff_1 == 0): 
+            if(coeff_2 == 0):
+                #coeff_3 not zero !!!
+                coeff_3 = coeff_3 -1
+                coeff_2 = 25
+                coeff_1 = 26
+                
+            else:
+                coeff_1 = 26
+                coeff_2 = coeff_2-1
+                if(coeff_2 == 0):
+                    if(coeff_3 != 0):
+                        coeff_3 = coeff_3 -1
+                        coeff_2 = 26
+                    else:
+                        pass
+                else:
+                    pass
+        
+        else:
+            if(coeff_2 == 0): 
+                if(coeff_3 ==0): # X 0 0
+                    pass
+                else: # X 0 X
+                    coeff_2 = 26
+                    coeff_3 = coeff_3-1
+            else: # X
+                pass
+        
+        
+        if(coeff_3!=0):
+            self.index_txt.append(chr(ord('A')-1 + coeff_3))
+        
+        if(coeff_2!=0):
+            self.index_txt.append(chr(ord('A')-1 + coeff_2))
+        
+        if(coeff_1!=0):
+            self.index_txt.append(chr(ord('A')-1 + coeff_1))
+        
+        self.index_txt = "".join(self.index_txt)
+        
+        print(self.index_txt)
+    
+    def int_to_text(self , num):
+        self.length_check(num) #update length info
+        self.index_txt = []
+        if(num == 0):
+            print "ERROR index is 0"
+            return -1;
+        
+        coeff = []
+        for i in range(0, self.coeffcnt): #make list buffer
+            coeff.append("")
+        
+        reverse = range(self.coeffcnt-1, -1, -1) # n, n-1, ... , 2,1,0 
+        
+        for i in reverse: # n, n-1, ... , 2,1,0 
+            minus_term = 0 
+            for j in list(reversed(range(i, self.coeffcnt-1))):
+                minus_term = minus_term+(coeff[j+1]*(26**(j+1)))            
+            result = (num - minus_term) / (26**i)
+            coeff[i] = result
+ 
+        for i in range (0,self.coeffcnt-1):
+            if(coeff[i] == 0):
+                cnt=0 #digit distance
+                down_index = 0
+                for j in range (i+1, self.coeffcnt): #next to final digit
+                    cnt = cnt +1
+                    if(coeff[j] > 0):
+                        down_index = j
+                        break
+                coeff[down_index] = coeff[down_index] - 1
+                
+                for j in range (down_index-1,-1,-1): #digit distance down from existing number digit
+                    if(j==i):
+                        coeff[j] = 26
+                        break
+                    else:
+                        coeff[j] = 25
+                        
+
+        print(coeff)
+        
+        for i in range(self.length-1,-1,-1):
+            self.index_txt.append(chr(ord('A')-1 + coeff[i]))
+
+        self.index_txt = "".join(self.index_txt)
+        print(self.index_txt)
+        return self.index_txt
+    
+    def list_up(self):
+        for i in range(1, self.index+1):
+            self.indexlist_up.append(self.int_to_text(i))
+        
+        print(self.indexlist_up)
+    
+    def length_check(self, num):
+        temp_value = 26
+        temp_remain = 0
+        self.length = 1;
+        self.coeffcnt = 0
+        while not(num <= temp_value):
+            # print("temp_value %s" % temp_value)
+            self.length = self.length+1
+            temp_value = temp_value*( 1 + temp_value )
+        
+        self.coeffcnt = self.length
+        if(num == temp_value):
+            self.coeffcnt = self.coeffcnt+1
+        
+       # print("length : %s coeff_cnt : %s" % (self.length, self.coeffcnt))
 
 class MyWindow(QMainWindow, form_class):
     def __init__(self):
