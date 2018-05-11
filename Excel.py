@@ -107,10 +107,8 @@ class Exlcol():
  
         for i in range (0,self.coeffcnt-1):
             if(coeff[i] == 0):
-                cnt=0 #digit distance
                 down_index = 0
                 for j in range (i+1, self.coeffcnt): #next to final digit
-                    cnt = cnt +1
                     if(coeff[j] > 0):
                         down_index = j
                         break
@@ -124,20 +122,20 @@ class Exlcol():
                         coeff[j] = 25
                         
 
-        print(coeff)
+        # print(coeff)
         
         for i in range(self.length-1,-1,-1):
             self.index_txt.append(chr(ord('A')-1 + coeff[i]))
 
         self.index_txt = "".join(self.index_txt)
-        print(self.index_txt)
+        # print(self.index_txt)
         return self.index_txt
     
     def list_up(self):
         for i in range(1, self.index+1):
             self.indexlist_up.append(self.int_to_text(i))
         
-        print(self.indexlist_up)
+        return self.indexlist_up
     
     def length_check(self, num):
         temp_value = 26
@@ -193,6 +191,8 @@ class MyWindow(QMainWindow, form_class):
         self.tableWidget.setRowCount(MAX_ROW_SIZE)
         #######
         ## TODO : From MAX SIZE need to update tableWidget.setHorizontalHeaderLabels ( List of label )
+        list = Exlcol(MAX_COL_SIZE)
+        self.tableWidget.setHorizontalHeaderLabels ( list.list_up() )
         #######
         
         for row in range(1, MAX_ROW_SIZE+1):
